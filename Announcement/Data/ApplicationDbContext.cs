@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Announcement.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace Announcement.Data
             : base(options)
         {
         }
+        public DbSet<Announcements> Announcements { get; set; }
+        public DbSet<Announcement.Models.Comment> Comment { get; set; }
     }
 }
