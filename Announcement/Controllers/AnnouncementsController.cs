@@ -56,7 +56,7 @@ namespace Announcement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Desciption,FilePath,CreatedBy,Id,CreatedAt,UpdateAt")] Announcements announcements)
+        public async Task<IActionResult> Create(Announcements announcements)
         {
             if (ModelState.IsValid)
             {
