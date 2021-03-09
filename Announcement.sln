@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement", "Announcement\Announcement.csproj", "{29D033EE-A087-446B-9B3C-6214E45DD53F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnouncementRazorPages", "AnnouncementRazorPages\AnnouncementRazorPages.csproj", "{5021CC66-9D00-4E85-BC34-2E9E011443A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnnouncementRazorPages", "AnnouncementRazorPages\AnnouncementRazorPages.csproj", "{5021CC66-9D00-4E85-BC34-2E9E011443A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{80F57C34-6A97-4642-B390-F657FDBD8FB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{80F57C34-6A97-4642-B390-F657FDBD8FB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
