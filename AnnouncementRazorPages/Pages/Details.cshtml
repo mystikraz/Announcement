@@ -1,0 +1,106 @@
+﻿@page
+@model AnnouncementRazorPages.Pages.DetailsModel
+@{
+    ViewData["Title"] = "Announcement Details";
+}
+
+<h1>Announcement Details</h1>
+
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Announcements.Title)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Announcements.Title)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Announcements.Desciption)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Announcements.Desciption)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Announcements.FilePath)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Announcements.FilePath)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Announcements.CreatedBy)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Announcements.CreatedBy)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Announcements.CreatedAt)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Announcements.CreatedAt)
+    </dd>
+    @*<dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdateAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpdateAt)
+        </dd>*@
+</dl>
+
+<div class="row mb-2">
+<div class="col-md-12">
+    <button id="commentBtn" class="btn btn-secondary btn-sm">Comment</button>
+</div>
+</div>
+
+<div class="row" id="commentBox" style="display:none">
+    <div class="col-md-12">
+       
+            <div class="form-group">
+                <input type="text" class="form-control" id="description" asp-for="Comment.Description" placeholder="write a comment">
+                <input type="hidden" class="form-control" id="announcementsId" asp-for="Comment.AnnouncementsId" value="@Model.Announcements.Id">
+                @*<input type="hidden" class="form-control" id="sender" name="sender" value="@model.sender">
+                    <input type="hidden" class="form-control" id="receiver" name="receiver" value="@model.receiver">*@
+            </div>
+            <button type="button" id="btnGet" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var comment in Model.Comments)
+        {
+            <p>
+                @comment.Description
+                @comment.SenderId
+            </p>
+        }
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#commentBtn").click(function () {
+                $("#commentBox").show();
+            });
+            $("#btnGet").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "Pages/Details",                    
+                    data: { "description": $("#description").val(), "announcementsId": $("#announcementsId").val() },
+                    success: function (response) {
+                        Console.log(response)
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+        });
+    </script>
+}

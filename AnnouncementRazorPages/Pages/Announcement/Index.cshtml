@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-               Title
+                Title
             </th>
             <th>
-               Description
+                Description
             </th>
             <th>
-               CreatedBy
+                CreatedBy
             </th>
             <th>
-               Created At
+                Created At
             </th>
             <th></th>
         </tr>
@@ -48,17 +48,13 @@
                     @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UpdateAt)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./Delete" id="deleteBtn" onclick="return confirm('Are you sure you want to delete?')" asp-route-id="@item.Id">Delete</a>
+                    <a asp-page="./Details" asp-route-id="@item.Id">View</a>
 
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 
 

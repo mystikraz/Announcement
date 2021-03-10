@@ -1,5 +1,4 @@
-﻿using Data.Announcement.Models;
-using Data.Models;
+﻿using Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
