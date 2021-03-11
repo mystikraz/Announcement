@@ -7,6 +7,7 @@ using AnnouncementRazorPages.Data;
 using Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnnouncementRazorPages.Pages
 {
@@ -29,14 +30,48 @@ namespace AnnouncementRazorPages.Pages
                 return NotFound();
             }
             Announcements = context.Announcements.FirstOrDefault(a => a.Id == id);
-            Comments = context.Comment.ToList();
+            //Comments = context.Comment.ToList();
             if (Announcements == null)
             {
                 return NotFound();
             }
             return Page();
         }
-        public JsonResult OnPost(Comment comment)
+        public IActionResult OnGetComments()
+        {
+            var comments = from comment in context.Comment
+                           join user in context.Users
+                           on comment.SenderId equals user.Id
+                           select new Comment
+                           {
+                               Id = comment.Id,
+                               Description = comment.Description,
+                               Sender = user,
+                               CreatedAt = comment.CreatedAt,
+                               ParentId = comment.ParentId
+                           };
+            Comments = comments.ToList().Where(c => c.ParentId == 0).ToList();
+            if (Comments == null)
+            {
+                return new JsonResult("Not Found");
+            }
+            return new JsonResult(Comments);
+        }
+        public IActionResult OnGetCommentById(int? id)
+        {
+            var comments = from comment in context.Comment
+                           join user in context.Users
+                           on comment.SenderId equals user.Id
+                           select new Comment
+                           { Id = comment.Id, Description = comment.Description, Sender = user, CreatedAt = comment.CreatedAt, ParentId = comment.ParentId };
+            Comments = comments.ToList().Where(c => c.ParentId == id).ToList();
+            if (Comments == null)
+            {
+                return new JsonResult("Not Found");
+            }
+            return new JsonResult(Comments);
+        }
+        public JsonResult OnPostGetComment(Comment comment)
         {
             if (!ModelState.IsValid)
             {

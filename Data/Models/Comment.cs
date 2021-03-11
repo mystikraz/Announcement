@@ -1,4 +1,5 @@
 ﻿using Data.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,11 @@ namespace Data.Models
         public int AnnouncementsId { get; set; }
         public virtual Announcements Announcements { get; set; }
         public string SenderId { get; set; }
+        public virtual IdentityUser Sender { get; set; }
         public string ReceiverId { get; set; }
+        public virtual IdentityUser Receiver { get; set; }
+        public int ParentId { get; set; }
+
 
     }
 }
