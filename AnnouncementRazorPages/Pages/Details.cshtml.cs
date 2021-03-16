@@ -37,9 +37,9 @@ namespace AnnouncementRazorPages.Pages
             }
             return Page();
         }
-        public IActionResult OnGetComments()
+        public IActionResult OnGetComments(int? id)
         {
-            var comments = from comment in context.Comment
+            var comments = from comment in context.Comment  // select id, desciption, users.Id, users.name, users.email, from comment as comment join aspnetusers as users on comment.senderId=users.userId 
                            join user in context.Users
                            on comment.SenderId equals user.Id
                            select new Comment
@@ -48,9 +48,12 @@ namespace AnnouncementRazorPages.Pages
                                Description = comment.Description,
                                Sender = user,
                                CreatedAt = comment.CreatedAt,
-                               ParentId = comment.ParentId
+                               ParentId = comment.ParentId,
+                               AnnouncementsId=comment.AnnouncementsId
                            };
-            Comments = comments.ToList().Where(c => c.ParentId == 0).ToList();
+
+
+            Comments = comments.ToList().Where(c => c.ParentId == 0 && c.AnnouncementsId == id).ToList();
             if (Comments == null)
             {
                 return new JsonResult("Not Found");
@@ -71,7 +74,7 @@ namespace AnnouncementRazorPages.Pages
             }
             return new JsonResult(Comments);
         }
-        public JsonResult OnPostGetComment(Comment comment)
+        public JsonResult OnPostComment(string description, string announcementsId)
         {
             if (!ModelState.IsValid)
             {

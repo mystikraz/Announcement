@@ -9,6 +9,7 @@
 <hr />
 <dl class="row">
     <dt class="col-sm-2">
+        @Html.HiddenFor(model => model.Announcements.Id)
         @Html.DisplayNameFor(model => model.Announcements.Title)
     </dt>
     <dd class="col-sm-10">
@@ -81,7 +82,7 @@
             });
             $("#btnGet").click(function () {
                 $.ajax({
-                    url: "/Details?handler=GetComment",
+                    url: "/Details?handler=Comment",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("XSRF-TOKEN",
                             $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -103,17 +104,18 @@
             });
 
             function getComments() {
+                var announcementsId = $("#Announcements_Id").val();
                 $.ajax({
-                    url: "/Details?handler=Comments",
+                    url: `/Details?id=${announcementsId}&&handler=Comments`,
                     type: "GET",
                     success: function (response) {
                         $.each(response, function (index, value) {
                             $('#comments').append(`<ul class="list-group list-group-flush">
-                                                                                <li class="list-group-item ${value.id}">
-                                                                                      <small class="text-muted">${value.sender.userName}: </small>
-                                                                                      <span>${value.description}</span>
+                                                                                    <li class="list-group-item ${value.id}">
+                                                                                          <small class="text-muted">${value.sender.userName}: </small>
+                                                                                          <span>${value.description}</span>
 
-                                                                                    </li></ul>`);
+                                                                                        </li></ul>`);
                             getCommentById(value.id);
                         })
                     },
@@ -132,11 +134,11 @@
                     success: function (response) {
                         $.each(response, function (index, value) {
                             $(`.${id}`).append(`
-                                                                                <li class="list-group-item ${value.id}">
-                                                                                      <small class="text-muted">${value.sender.userName}: </small>
-                                                                                      <span>${value.description}</span>
+                                                                                    <li class="list-group-item ${value.id}">
+                                                                                          <small class="text-muted">${value.sender.userName}: </small>
+                                                                                          <span>${value.description}</span>
 
-                                                                                    </li>`);
+                                                                                        </li>`);
                         })
                     },
                     failure: function (response) {
