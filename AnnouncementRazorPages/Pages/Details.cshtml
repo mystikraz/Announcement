@@ -9,6 +9,7 @@
 <hr />
 <dl class="row">
     <dt class="col-sm-2">
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.Announcements.Id)
         @Html.DisplayNameFor(model => model.Announcements.Title)
     </dt>
@@ -91,7 +92,7 @@
                     data: { "description": $("#description").val(), "announcementsId": $("#announcementsId").val() },
                     success: function (response) {
                         $('#comments').empty();
-                        getComments();
+                        getComments(0);
                     },
                     failure: function (response) {
                         alert(response.responseText);
@@ -103,10 +104,38 @@
                 $("#description").val("");
             });
 
-            function getComments() {
+            $("body").on('click', '.replyBtn', function () {
+                let id = $(this).attr('name');
+                $(`#${id}`).show();
+            });
+
+            $("body").on('click', '.replyCommentBtn', function () {
+                let id = $(this).attr('name');
+                    $.ajax({
+                        url: "/Details?handler=Comment",
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                                $('input:hidden[name="__RequestVerificationToken"]').val());
+                        },
+                        type: "POST",
+                        data: {"parentId":id, "description": $(`#description${id}`).val(), "announcementsId": $(`#announcementId${id}`).val() },
+                        success: function (response) {
+                            getCommentById(id);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                    $("#description").val("");
+            });
+
+            function getComments(parentId) {
                 var announcementsId = $("#Announcements_Id").val();
                 $.ajax({
-                    url: `/Details?id=${announcementsId}&&handler=Comments`,
+                    url: `/Details?id=${announcementsId}&&parentId=${parentId}&&handler=Comments`,
                     type: "GET",
                     success: function (response) {
                         $.each(response, function (index, value) {
@@ -114,7 +143,19 @@
                                                                                     <li class="list-group-item ${value.id}">
                                                                                           <small class="text-muted">${value.sender.userName}: </small>
                                                                                           <span>${value.description}</span>
+                                                                                                <a href="#" class="replyBtn" name="${value.id}">Reply</a>
+                                                                                                <div class="row mb-2" id="${value.id}" style="display:none">
+                                                                                                    <div class="col-md-12">
 
+                                                                                                        <div class="form-group row">
+                                                                                                            <input type="text" class="col-sm-8 col-form-label" id="description${value.id}" placeholder="write a comment">
+                                                                                                            <input type="hidden" id="announcementId${value.id}" value="@Model.Announcements.Id">
+                                                                                                            <div class="col-sm-2">
+                                                                                                                <button type="button" class="btn btn-primary replyCommentBtn" name="${value.id}">Add Comment</button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                         </li></ul>`);
                             getCommentById(value.id);
                         })
@@ -137,7 +178,19 @@
                                                                                     <li class="list-group-item ${value.id}">
                                                                                           <small class="text-muted">${value.sender.userName}: </small>
                                                                                           <span>${value.description}</span>
+                                                                                              <a href="#" class="replyBtn" name="${value.id}">Reply</a>
+                                                                                                <div class="row mb-2" id="${value.id}" style="display:none">
+                                                                                                    <div class="col-md-12">
 
+                                                                                                        <div class="form-group row">
+                                                                                                            <input type="text" class="col-sm-8 col-form-label" id="description${value.id}" placeholder="write a comment">
+                                                                                                            <input type="hidden" id="announcementId${value.id}" value="@Model.Announcements.Id">
+                                                                                                            <div class="col-sm-2">
+                                                                                                                <button type="button" class="btn btn-primary replyCommentBtn" name="${value.id}">Add Comment</button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                         </li>`);
                         })
                     },

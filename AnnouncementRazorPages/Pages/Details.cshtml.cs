@@ -74,24 +74,28 @@ namespace AnnouncementRazorPages.Pages
             }
             return new JsonResult(Comments);
         }
-        public JsonResult OnPostComment(string description, string announcementsId)
+        public JsonResult OnPostComment(Comment comment)
         {
             if (!ModelState.IsValid)
             {
                 return new JsonResult("Data error");
             }
-            SaveToDb();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return new JsonResult("user Not LoggedIn");
+            }
+            SaveToDb(comment, userId);
 
             return new JsonResult("Success");
         }
 
-        private void SaveToDb()
+        private void SaveToDb(Comment comment, string userId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Comment.SenderId = userId;
-            Comment.CreatedAt = DateTime.Now;
-            Comment.UpdateAt = DateTime.Now;
-            context.Comment.Add(Comment);
+            comment.SenderId = userId;
+            comment.CreatedAt = DateTime.Now;
+            comment.UpdateAt = DateTime.Now;
+            context.Comment.Add(comment);
             context.SaveChanges();
         }
     }

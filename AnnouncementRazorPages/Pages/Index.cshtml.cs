@@ -2,6 +2,7 @@
 using Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,19 @@ namespace AnnouncementRazorPages.Pages
 
         public void OnGet()
         {
-            Announcements = context.Announcements.ToList();
+            Announcements = (from announcement in context.Announcements
+                             join user in context.Users
+                             on announcement.CreatedBy equals user.Id
+                             select new Announcements
+                             {
+                                 Title = announcement.Title,
+                                 Id = announcement.Id,
+                                 CreatedBy = user.UserName,
+                                 CreatedAt = announcement.CreatedAt,
+                                 Desciption = announcement.Desciption,
+                             }).ToList();
+
+            //Announcements = context.Announcements.Include(x => x.CreatedBy).ToList();
         }
     }
 }
