@@ -34,10 +34,11 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.Announcements.CreatedAt)
     </dd>
-    @*<dt class = "col-sm-2">
+    @*
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UpdateAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdateAt)
         </dd>*@
 </dl>
@@ -66,10 +67,10 @@
     <div class="col-md-12" id="comments">
         @*@foreach (var comment in Model.Comments)
             {
-                <p>
-                    @comment.Description
-                    @comment.SenderId
-                </p>
+            <p>
+                @comment.Description
+                @comment.SenderId
+            </p>
             }*@
     </div>
 </div>
@@ -77,6 +78,7 @@
 {
     <script>
         $(document).ready(function () {
+
             getComments();
             $("#commentBtn").click(function () {
                 $("#commentBox").show();
@@ -143,7 +145,7 @@
                                                                                     <li class="list-group-item ${value.id}">
                                                                                           <small class="text-muted">${value.sender.userName}: </small>
                                                                                           <span>${value.description}</span>
-                                                                                                <a href="#" class="replyBtn" name="${value.id}">Reply</a>
+                                                                                                <a href="#" class="replyBtn" id="replyBtnId${value.id}" name="${value.id}">Reply</a>
                                                                                                 <div class="row mb-2" id="${value.id}" style="display:none">
                                                                                                     <div class="col-md-12">
 
@@ -156,7 +158,8 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                        </li></ul>`);
+                                                                                      </li></ul>`);
+                            appendEditDelete(value);
                             getCommentById(value.id);
                         })
                     },
@@ -173,12 +176,14 @@
                     url: `/Details?id=${id}&&handler=CommentById`,
                     type: "GET",
                     success: function (response) {
+
                         $.each(response, function (index, value) {
+                            $(`.${value.id}`).remove();
                             $(`.${id}`).append(`
                                                                                     <li class="list-group-item ${value.id}">
                                                                                           <small class="text-muted">${value.sender.userName}: </small>
                                                                                           <span>${value.description}</span>
-                                                                                              <a href="#" class="replyBtn" name="${value.id}">Reply</a>
+                                                                                              <a href="#" class="replyBtn" id="replyBtnId${value.id}" name="${value.id}">Reply</a>
                                                                                                 <div class="row mb-2" id="${value.id}" style="display:none">
                                                                                                     <div class="col-md-12">
 
@@ -186,12 +191,14 @@
                                                                                                             <input type="text" class="col-sm-8 col-form-label" id="description${value.id}" placeholder="write a comment">
                                                                                                             <input type="hidden" id="announcementId${value.id}" value="@Model.Announcements.Id">
                                                                                                             <div class="col-sm-2">
-                                                                                                                <button type="button" class="btn btn-primary replyCommentBtn" name="${value.id}">Add Comment</button>
+                                                                                                                <button type="button" class="btn btn-primary replyCommentBtn" id="replyBtnId${value.id}" name="${value.id}">Add Comment</button>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </li>`);
+                            appendEditDelete(value);
+                            getCommentById(value.id);
                         })
                     },
                     failure: function (response) {
@@ -201,6 +208,12 @@
                         console.log(response);
                     }
                 });
+            }
+
+            function appendEditDelete(value) {
+                if (value.sender.userName === "@User.Identity.Name") {
+                    $(`#replyBtnId${value.id}`).after(` | <a href="#" id="deleteBtnId${value.id}">delete</a> | <a href="#" id="editBtnId${value.id}">edit</a>`);
+                            }
             }
         });
     </script>

@@ -19,7 +19,10 @@
                 Description
             </th>
             <th>
-                CreatedBy
+                FilePath
+            </th>
+            <th>
+                Created By
             </th>
             <th>
                 Created At
@@ -39,7 +42,14 @@
                     @Html.DisplayFor(modelItem => item.Desciption)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FilePath)
+                    @if (string.IsNullOrWhiteSpace(item.FilePath))
+                    {
+                        <span>Not Found</span>
+                    }
+                    else
+                    {
+                        <a href="pdf/@item.FilePath">Download</a>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedBy)

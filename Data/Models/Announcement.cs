@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,6 +18,8 @@ namespace Data.Models
         public string FilePath { get; set; }
         //[Column("CreatedBy")]
         public string CreatedBy { get; set; }
+        [NotMapped]
+        public IFormFile File { get; set; }
         //public virtual IdentityUser CreatedBy { get; set; }
     }
 }

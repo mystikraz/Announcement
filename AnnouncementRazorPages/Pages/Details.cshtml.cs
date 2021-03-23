@@ -5,12 +5,14 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AnnouncementRazorPages.Data;
 using Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace AnnouncementRazorPages.Pages
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly ApplicationDbContext context;
